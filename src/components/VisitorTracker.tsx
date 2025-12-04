@@ -213,7 +213,7 @@ export const VisitorTracker = () => {
                                         whileHover={{ scale: hasLiked ? 1 : 1.05 }}
                                         whileTap={{ scale: hasLiked ? 1 : 0.95 }}
                                         onClick={handleLike}
-                                        className={`flex items-center gap-2 text-sm ${hasLiked ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}`}
+                                        className={`flex items-center gap-2 text-sm ${hasLiked ? 'cursor-not-allowed' : 'cursor-pointer'}`}
                                     >
                                         <Heart className={`h-4 w-4 ${hasLiked ? 'fill-red-500 text-red-500' : 'text-red-500'}`} />
                                         <div>
