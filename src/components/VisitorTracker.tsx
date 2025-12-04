@@ -83,6 +83,13 @@ export const VisitorTracker = () => {
     }, []);
 
     const handleLike = async () => {
+        // Check if user is registered first
+        if (!registered) {
+            // Show registration modal if not registered
+            setShowRegisterModal(true);
+            return;
+        }
+
         if (!hasLiked) {
             try {
                 // Optimistic update - update UI immediately
