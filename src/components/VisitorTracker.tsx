@@ -145,6 +145,11 @@ export const VisitorTracker = () => {
                 // Always mark as registered and show success
                 localStorage.setItem("rutalegal_registered", "true");
                 setRegistered(true);
+
+                // Reset hasLiked so they can give a like after registering
+                setHasLiked(false);
+                localStorage.removeItem("rutalegal_user_liked");
+
                 setShowRegisterModal(false);
                 setShowSuccessModal(true);
 
@@ -156,6 +161,11 @@ export const VisitorTracker = () => {
                 // Still mark as registered locally and show success
                 localStorage.setItem("rutalegal_registered", "true");
                 setRegistered(true);
+
+                // Reset hasLiked so they can give a like after registering
+                setHasLiked(false);
+                localStorage.removeItem("rutalegal_user_liked");
+
                 setShowRegisterModal(false);
                 setShowSuccessModal(true);
             }
