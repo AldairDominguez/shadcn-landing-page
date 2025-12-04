@@ -57,14 +57,20 @@ export const VisitorTracker = () => {
     };
 
 
+
     useEffect(() => {
         // Check if user is registered (still using localStorage for this)
         const userRegistered = localStorage.getItem("rutalegal_registered") === "true";
         setRegistered(userRegistered);
 
-        // Check if user already liked (from localStorage)
-        const userLiked = localStorage.getItem("rutalegal_user_liked") === "true";
-        setHasLiked(userLiked);
+        // Check if user already liked (from localStorage) - ONLY if registered
+        if (userRegistered) {
+            const userLiked = localStorage.getItem("rutalegal_user_liked") === "true";
+            setHasLiked(userLiked);
+        } else {
+            // If not registered, reset hasLiked to false
+            setHasLiked(false);
+        }
 
         // Record visit and fetch stats
         recordVisit();
@@ -136,25 +142,22 @@ export const VisitorTracker = () => {
                     body: JSON.stringify({ name, email }),
                 });
 
-                if (response.ok) {
-                    localStorage.setItem("rutalegal_registered", "true");
-                    setRegistered(true);
-                    setShowRegisterModal(false);
-                    setShowSuccessModal(true);
-                } else {
-                    const error = await response.json();
-                    console.error('Error registering:', error);
-                    // Still mark as registered locally to avoid annoying the user
-                    localStorage.setItem("rutalegal_registered", "true");
-                    setRegistered(true);
-                    setShowRegisterModal(false);
-                }
-            } catch (error) {
-                console.error('Error registering:', error);
-                // Still mark as registered locally
+                // Always mark as registered and show success
                 localStorage.setItem("rutalegal_registered", "true");
                 setRegistered(true);
                 setShowRegisterModal(false);
+                setShowSuccessModal(true);
+
+                if (!response.ok) {
+                    console.error('Error registering on server, but user is registered locally');
+                }
+            } catch (error) {
+                console.error('Error registering:', error);
+                // Still mark as registered locally and show success
+                localStorage.setItem("rutalegal_registered", "true");
+                setRegistered(true);
+                setShowRegisterModal(false);
+                setShowSuccessModal(true);
             }
         }
     };
