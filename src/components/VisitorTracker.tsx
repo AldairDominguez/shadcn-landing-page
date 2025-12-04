@@ -56,10 +56,15 @@ export const VisitorTracker = () => {
         }
     };
 
+
     useEffect(() => {
         // Check if user is registered (still using localStorage for this)
         const userRegistered = localStorage.getItem("rutalegal_registered") === "true";
         setRegistered(userRegistered);
+
+        // Check if user already liked (from localStorage)
+        const userLiked = localStorage.getItem("rutalegal_user_liked") === "true";
+        setHasLiked(userLiked);
 
         // Record visit and fetch stats
         recordVisit();
@@ -80,20 +85,34 @@ export const VisitorTracker = () => {
     const handleLike = async () => {
         if (!hasLiked) {
             try {
+                // Optimistic update - update UI immediately
+                const newLikes = likes + 1;
+                setLikes(newLikes);
+                setHasLiked(true);
+                localStorage.setItem("rutalegal_user_liked", "true");
+
+                // Send to server (without IP check)
                 const response = await fetch(`${API_BASE}/stats?action=like`, {
                     method: 'POST',
                 });
 
                 if (response.ok) {
                     const data: StatsResponse = await response.json();
+                    // Update with server response to sync
                     setLikes(data.likes);
-                    setHasLiked(true);
                 } else {
-                    const error = await response.json();
-                    console.error('Error liking:', error);
+                    // If server fails, revert
+                    console.error('Error liking');
+                    setLikes(likes);
+                    setHasLiked(false);
+                    localStorage.removeItem("rutalegal_user_liked");
                 }
             } catch (error) {
                 console.error('Error liking:', error);
+                // Revert on error
+                setLikes(likes);
+                setHasLiked(false);
+                localStorage.removeItem("rutalegal_user_liked");
             }
         }
     };

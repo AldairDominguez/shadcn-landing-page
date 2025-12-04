@@ -27,13 +27,13 @@ async function initializeStats() {
     console.log('🚀 Inicializando estadísticas...\n');
 
     try {
-        // Establecer 200 visitas
-        await redisCommand(['SET', 'rutalegal:visits', '200']);
-        console.log('✅ Visitas inicializadas: 200');
+        // Establecer 500 visitas
+        await redisCommand(['SET', 'rutalegal:visits', '500']);
+        console.log('✅ Visitas inicializadas: 500');
 
-        // Establecer 100 me gustas
-        await redisCommand(['SET', 'rutalegal:likes', '100']);
-        console.log('✅ Me gustas inicializados: 100');
+        // Establecer 300 me gustas
+        await redisCommand(['SET', 'rutalegal:likes', '300']);
+        console.log('✅ Me gustas inicializados: 300');
 
         // Verificar
         const visits = await redisCommand(['GET', 'rutalegal:visits']);

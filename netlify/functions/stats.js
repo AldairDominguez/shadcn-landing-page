@@ -96,31 +96,14 @@ exports.handler = async (event) => {
             }
 
             case 'like': {
-                // Check if user already liked
-                const hasLiked = await redisCommand(['SISMEMBER', likedIPsKey, clientIP]);
-
-                if (hasLiked === 1) {
-                    return {
-                        statusCode: 400,
-                        headers,
-                        body: JSON.stringify({ error: 'Already liked' }),
-                    };
-                }
-
-                // Add like
-                await Promise.all([
-                    redisCommand(['INCR', likesKey]),
-                    redisCommand(['SADD', likedIPsKey, clientIP]),
-                ]);
-
-                const [visits, likes] = await Promise.all([
-                    redisCommand(['GET', visitsKey]),
-                    redisCommand(['GET', likesKey]),
-                ]);
+                // Simply increment like count (no IP check)
+                // Client-side (localStorage) handles preventing duplicate likes per browser
+                const newLikes = await redisCommand(['INCR', likesKey]);
+                const visits = await redisCommand(['GET', visitsKey]);
 
                 const response = {
                     visits: parseInt(visits || '0'),
-                    likes: parseInt(likes),
+                    likes: parseInt(newLikes),
                     hasLiked: true,
                 };
 
