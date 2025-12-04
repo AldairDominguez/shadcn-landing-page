@@ -6,56 +6,64 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { motion } from "framer-motion";
 
 interface TestimonialProps {
   image: string;
   name: string;
   userName: string;
   comment: string;
+  initials: string;
 }
 
 const testimonials: TestimonialProps[] = [
   {
-    image: "https://github.com/shadcn.png",
-    name: "John Doe React",
-    userName: "@john_Doe",
-    comment: "This landing page is awesome!",
+    image: "https://i.pravatar.cc/150?img=8",
+    name: "Roberto Fernández",
+    userName: "Cliente - Caso Laboral",
+    comment: "Excelente atención y profesionalismo. Ganamos el caso de despido injustificado gracias al Dr. Silva. ¡Totalmente recomendados!",
+    initials: "RF"
   },
   {
-    image: "https://github.com/shadcn.png",
-    name: "John Doe React",
-    userName: "@john_Doe1",
+    image: "https://i.pravatar.cc/150?img=5",
+    name: "María González",
+    userName: "Cliente - Derecho Familiar",
     comment:
-      "Lorem ipsum dolor sit amet,empor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.",
+      "La Dra. Martínez me ayudó en un proceso de divorcio muy complicado. Su empatía y conocimiento legal fueron fundamentales. Estoy muy agradecida.",
+    initials: "MG"
   },
 
   {
-    image: "https://github.com/shadcn.png",
-    name: "John Doe React",
-    userName: "@john_Doe2",
+    image: "https://i.pravatar.cc/150?img=14",
+    name: "Juan Carlos Pérez",
+    userName: "Cliente - Derecho Penal",
     comment:
-      "Lorem ipsum dolor sit amet,exercitation. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.",
+      "El Dr. Mendoza es un excelente abogado penalista. Su estrategia de defensa fue impecable y logró la absolución en mi caso. Rutalegal es sinónimo de calidad.",
+    initials: "JP"
   },
   {
-    image: "https://github.com/shadcn.png",
-    name: "John Doe React",
-    userName: "@john_Doe3",
+    image: "https://i.pravatar.cc/150?img=9",
+    name: "Laura Sánchez",
+    userName: "Empresaria - Derecho Corporativo",
     comment:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
+      "Como empresaria necesitaba asesoría legal confiable. La Dra. Rojas ha sido clave en la estructuración legal de mi empresa. Servicio de primera.",
+    initials: "LS"
   },
   {
-    image: "https://github.com/shadcn.png",
-    name: "John Doe React",
-    userName: "@john_Doe4",
+    image: "https://i.pravatar.cc/150?img=11",
+    name: "Miguel Torres",
+    userName: "Cliente - Derecho Civil",
     comment:
-      "Lorem ipsum dolor sit amet, tempor incididunt  aliqua. Ut enim ad minim veniam, quis nostrud.",
+      "Recuperé mi propiedad gracias a Rutalegal. El equipo fue muy profesional y me mantuvieron informado en todo momento del proceso.",
+    initials: "MT"
   },
   {
-    image: "https://github.com/shadcn.png",
-    name: "John Doe React",
-    userName: "@john_Doe5",
+    image: "https://i.pravatar.cc/150?img=10",
+    name: "Carmen Díaz",
+    userName: "Cliente - Herencias",
     comment:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "Proceso de sucesión resuelto de manera eficiente y justa. El equipo de Rutalegal demostró gran conocimiento en derecho sucesorio.",
+    initials: "CD"
   },
 ];
 
@@ -65,44 +73,69 @@ export const Testimonials = () => {
       id="testimonials"
       className="container py-24 sm:py-32"
     >
-      <h2 className="text-3xl md:text-4xl font-bold">
-        Discover Why
+      <motion.h2
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="text-3xl md:text-4xl font-bold"
+      >
+        Lo Que Dicen
         <span className="bg-gradient-to-b from-primary/60 to-primary text-transparent bg-clip-text">
           {" "}
-          People Love{" "}
+          Nuestros Clientes{" "}
         </span>
-        This Landing Page
-      </h2>
+        Sobre Nosotros
+      </motion.h2>
 
-      <p className="text-xl text-muted-foreground pt-4 pb-8">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Non unde error
-        facere hic reiciendis illo
-      </p>
+      <motion.p
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+        className="text-xl text-muted-foreground pt-4 pb-8"
+      >
+        La satisfacción de nuestros clientes es nuestra mejor carta de presentación.
+        Lee sus experiencias y casos de éxito.
+      </motion.p>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-4 sm:block columns-2  lg:columns-3 lg:gap-6 mx-auto space-y-4 lg:space-y-6">
         {testimonials.map(
-          ({ image, name, userName, comment }: TestimonialProps) => (
-            <Card
+          ({ image, name, userName, comment, initials }: TestimonialProps, index) => (
+            <motion.div
               key={userName}
-              className="max-w-md md:break-inside-avoid overflow-hidden"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              whileHover={{ y: -5, transition: { duration: 0.2 } }}
             >
-              <CardHeader className="flex flex-row items-center gap-4 pb-2">
-                <Avatar>
-                  <AvatarImage
-                    alt=""
-                    src={image}
-                  />
-                  <AvatarFallback>OM</AvatarFallback>
-                </Avatar>
+              <Card className="max-w-md md:break-inside-avoid overflow-hidden h-full">
+                <CardHeader className="flex flex-row items-center gap-4 pb-2">
+                  <motion.div
+                    whileHover={{ scale: 1.1 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Avatar>
+                      <AvatarImage
+                        alt={name}
+                        src={image}
+                      />
+                      <AvatarFallback className="bg-primary text-white font-bold">
+                        {initials}
+                      </AvatarFallback>
+                    </Avatar>
+                  </motion.div>
 
-                <div className="flex flex-col">
-                  <CardTitle className="text-lg">{name}</CardTitle>
-                  <CardDescription>{userName}</CardDescription>
-                </div>
-              </CardHeader>
+                  <div className="flex flex-col">
+                    <CardTitle className="text-lg">{name}</CardTitle>
+                    <CardDescription>{userName}</CardDescription>
+                  </div>
+                </CardHeader>
 
-              <CardContent>{comment}</CardContent>
-            </Card>
+                <CardContent>{comment}</CardContent>
+              </Card>
+            </motion.div>
           )
         )}
       </div>

@@ -1,5 +1,4 @@
 import { About } from "./components/About";
-import { Cta } from "./components/Cta";
 import { FAQ } from "./components/FAQ";
 import { Features } from "./components/Features";
 import { Footer } from "./components/Footer";
@@ -7,32 +6,50 @@ import { Hero } from "./components/Hero";
 import { HowItWorks } from "./components/HowItWorks";
 import { Navbar } from "./components/Navbar";
 import { Newsletter } from "./components/Newsletter";
-import { Pricing } from "./components/Pricing";
 import { ScrollToTop } from "./components/ScrollToTop";
 import { Services } from "./components/Services";
 import { Sponsors } from "./components/Sponsors";
-import { Team } from "./components/Team";
-import { Testimonials } from "./components/Testimonials";
+import { LegalGuide } from "./components/LegalGuide";
+import { FreeConsultation } from "./components/FreeConsultation";
+import { LegalResources } from "./components/LegalResources";
+import { VisitorTracker } from "./components/VisitorTracker";
 import "./App.css";
+import { useEffect } from "react";
 
 function App() {
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        document.title = "¡Vuelve pronto! 👨‍⚖️";
+      } else {
+        document.title = "Rutalegal - Tu Aliado en Justicia";
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
+
   return (
     <>
       <Navbar />
       <Hero />
       <Sponsors />
+      <FreeConsultation />
+      <LegalGuide />
       <About />
       <HowItWorks />
       <Features />
       <Services />
-      <Cta />
-      <Testimonials />
-      <Team />
-      <Pricing />
+      <LegalResources />
       <Newsletter />
       <FAQ />
       <Footer />
       <ScrollToTop />
+      <VisitorTracker />
     </>
   );
 }

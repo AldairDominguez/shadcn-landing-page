@@ -10,21 +10,21 @@ interface ServiceProps {
 
 const serviceList: ServiceProps[] = [
   {
-    title: "Code Collaboration",
+    title: "Asesoría Legal Personalizada",
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi nesciunt est nostrum omnis ab sapiente.",
+      "Análisis detallado de tu caso con un enfoque personalizado. Desarrollamos estrategias legales adaptadas a tus necesidades específicas.",
     icon: <ChartIcon />,
   },
   {
-    title: "Project Management",
+    title: "Representación en Tribunales",
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi nesciunt est nostrum omnis ab sapiente.",
+      "Defensa profesional en todas las instancias judiciales. Nuestros abogados litigantes cuentan con amplia experiencia en salas de audiencia.",
     icon: <WalletIcon />,
   },
   {
-    title: "Task Automation",
+    title: "Gestión de Documentos Legales",
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi nesciunt est nostrum omnis ab sapiente.",
+      "Elaboración y revisión de contratos, demandas, recursos y todo tipo de documentación legal con la máxima precisión y profesionalismo.",
     icon: <MagnifierIcon />,
   },
 ];
@@ -36,14 +36,14 @@ export const Services = () => {
         <div>
           <h2 className="text-3xl md:text-4xl font-bold">
             <span className="bg-gradient-to-b from-primary/60 to-primary text-transparent bg-clip-text">
-              Client-Centric{" "}
+              Servicios Legales{" "}
             </span>
-            Services
+            Integrales
           </h2>
 
           <p className="text-muted-foreground text-xl mt-4 mb-8 ">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis
-            dolor.
+            En Rutalegal ofrecemos soluciones jurídicas completas con un
+            enfoque centrado en resultados y satisfacción del cliente.
           </p>
 
           <div className="flex flex-col gap-8">
@@ -68,7 +68,7 @@ export const Services = () => {
         <img
           src={cubeLeg}
           className="w-[300px] md:w-[500px] lg:w-[600px] object-contain"
-          alt="About services"
+          alt="Servicios legales"
         />
       </div>
     </section>

@@ -1,4 +1,3 @@
-import { Statistics } from "./Statistics";
 import pilot from "../assets/pilot.png";
 
 export const About = () => {
@@ -18,20 +17,20 @@ export const About = () => {
             <div className="pb-6">
               <h2 className="text-3xl md:text-4xl font-bold">
                 <span className="bg-gradient-to-b from-primary/60 to-primary text-transparent bg-clip-text">
-                  About{" "}
+                  Acerca de{" "}
                 </span>
-                Company
+                Rutalegal
               </h2>
               <p className="text-xl text-muted-foreground mt-4">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit
-                amet, consectetur adipiscing elit.
+                Rutalegal es una firma de abogados dinámica y profesional ubicada en
+                Lima, Perú. Nuestro equipo cuenta con profesionales altamente
+                capacitados y comprometidos con la excelencia. Nos especializamos en
+                brindar soluciones jurídicas integrales tanto para personas como para
+                empresas. Nuestro compromiso es defender tus derechos con profesionalismo,
+                ética y dedicación absoluta, construyendo relaciones de confianza a largo
+                plazo con cada uno de nuestros clientes.
               </p>
             </div>
-
-            <Statistics />
           </div>
         </div>
       </div>

@@ -13,33 +13,33 @@ interface FAQProps {
 
 const FAQList: FAQProps[] = [
   {
-    question: "Is this template free?",
-    answer: "Yes. It is a free ChadcnUI template.",
+    question: "¿Cuánto cuesta una consulta legal?",
+    answer: "La primera consulta es completamente gratuita. En ella evaluaremos tu caso y te proporcionaremos una cotización transparente de nuestros honorarios profesionales.",
     value: "item-1",
   },
   {
-    question: "Lorem ipsum dolor sit amet consectetur adipisicing elit?",
+    question: "¿En qué áreas del derecho se especializa Rutalegal?",
     answer:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sint labore quidem quam? Consectetur sapiente iste rerum reiciendis animi nihil nostrum sit quo, modi quod.",
+      "Nos especializamos en Derecho Civil, Penal, Laboral, Familiar, Corporativo, Inmobiliario y Tributario. Contamos con abogados expertos en cada una de estas áreas para brindarte la mejor asesoría.",
     value: "item-2",
   },
   {
     question:
-      "Lorem ipsum dolor sit amet  Consectetur natus dolores minus quibusdam?",
+      "¿Cuánto tiempo toma resolver un caso legal?",
     answer:
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Labore qui nostrum reiciendis veritatis necessitatibus maxime quis ipsa vitae cumque quo?",
+      "El tiempo varía según la complejidad del caso y el área del derecho. Durante la consulta inicial te proporcionaremos un estimado de tiempo basado en casos similares y las particularidades de tu situación.",
     value: "item-3",
   },
   {
-    question: "Lorem ipsum dolor sit amet, consectetur adipisicing elit?",
-    answer: "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
+    question: "¿Ofrecen planes de pago para sus servicios?",
+    answer: "Sí, entendemos que los servicios legales pueden representar una inversión importante. Ofrecemos planes de pago flexibles adaptados a tu situación financiera.",
     value: "item-4",
   },
   {
     question:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur natus?",
+      "¿Qué documentos necesito para la primera consulta?",
     answer:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sint labore quidem quam? Consectetur sapiente iste rerum reiciendis animi nihil nostrum sit quo, modi quod.",
+      "Te recomendamos traer cualquier documento relacionado con tu caso: contratos, notificaciones, demandas, correos electrónicos relevantes, etc. Sin embargo, si no cuentas con documentación, igual podemos realizar una evaluación inicial.",
     value: "item-5",
   },
 ];
@@ -51,9 +51,9 @@ export const FAQ = () => {
       className="container py-24 sm:py-32"
     >
       <h2 className="text-3xl md:text-4xl font-bold mb-4">
-        Frequently Asked{" "}
+        Preguntas{" "}
         <span className="bg-gradient-to-b from-primary/60 to-primary text-transparent bg-clip-text">
-          Questions
+          Frecuentes
         </span>
       </h2>
 
@@ -77,13 +77,13 @@ export const FAQ = () => {
       </Accordion>
 
       <h3 className="font-medium mt-4">
-        Still have questions?{" "}
+        ¿Aún tienes preguntas?{" "}
         <a
           rel="noreferrer noopener"
           href="#"
           className="text-primary transition-all border-primary hover:border-b-2"
         >
-          Contact us
+          Contáctanos
         </a>
       </h3>
     </section>
