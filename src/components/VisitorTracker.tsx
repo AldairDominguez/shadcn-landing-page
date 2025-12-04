@@ -65,14 +65,15 @@ export const VisitorTracker = () => {
 
         // Show register modal after 5 seconds if not registered
         if (!userRegistered) {
-            const timer = setTimeout(() => {
+            setTimeout(() => {
                 setShowRegisterModal(true);
             }, 5000);
-            return () => clearTimeout(timer);
         }
 
         // Poll for updates every 3 seconds to show real-time changes
         const interval = setInterval(fetchStats, 3000);
+
+        // Cleanup interval on unmount
         return () => clearInterval(interval);
     }, []);
 
