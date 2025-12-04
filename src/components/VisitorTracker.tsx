@@ -18,6 +18,7 @@ interface StatsResponse {
 export const VisitorTracker = () => {
     const [visits, setVisits] = useState(0);
     const [likes, setLikes] = useState(0);
+    const [hasLiked, setHasLiked] = useState(false);
     const [showRegisterModal, setShowRegisterModal] = useState(false);
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
@@ -60,6 +61,10 @@ export const VisitorTracker = () => {
         const userRegistered = localStorage.getItem("rutalegal_registered") === "true";
         setRegistered(userRegistered);
 
+        // Check if user already liked in this session (sessionStorage resets on reload)
+        const sessionLiked = sessionStorage.getItem("rutalegal_session_liked") === "true";
+        setHasLiked(sessionLiked);
+
         // Record visit and fetch stats
         recordVisit();
 
@@ -79,10 +84,17 @@ export const VisitorTracker = () => {
 
 
     const handleLike = async () => {
+        // Only allow one like per session
+        if (hasLiked) {
+            return;
+        }
+
         try {
             // Optimistic update - update UI immediately
             const newLikes = likes + 1;
             setLikes(newLikes);
+            setHasLiked(true);
+            sessionStorage.setItem("rutalegal_session_liked", "true");
 
             // Send to server
             const response = await fetch(`${API_BASE}/stats?action=like`, {
@@ -97,11 +109,15 @@ export const VisitorTracker = () => {
                 // If server fails, revert
                 console.error('Error liking');
                 setLikes(likes);
+                setHasLiked(false);
+                sessionStorage.removeItem("rutalegal_session_liked");
             }
         } catch (error) {
             console.error('Error liking:', error);
             // Revert on error
             setLikes(likes);
+            setHasLiked(false);
+            sessionStorage.removeItem("rutalegal_session_liked");
         }
     };
 
@@ -194,16 +210,16 @@ export const VisitorTracker = () => {
                                     <div className="h-8 w-px bg-border" />
 
                                     <motion.button
-                                        whileHover={{ scale: 1.05 }}
-                                        whileTap={{ scale: 0.95 }}
+                                        whileHover={{ scale: hasLiked ? 1 : 1.05 }}
+                                        whileTap={{ scale: hasLiked ? 1 : 0.95 }}
                                         onClick={handleLike}
-                                        className="flex items-center gap-2 text-sm cursor-pointer"
+                                        className={`flex items-center gap-2 text-sm ${hasLiked ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}`}
                                     >
-                                        <Heart className="h-4 w-4 text-red-500" />
+                                        <Heart className={`h-4 w-4 ${hasLiked ? 'fill-red-500 text-red-500' : 'text-red-500'}`} />
                                         <div>
                                             <div className="font-bold text-lg">{likes.toLocaleString()}</div>
                                             <div className="text-xs text-muted-foreground">
-                                                Me gusta
+                                                {hasLiked ? "Te gusta" : "Me gusta"}
                                             </div>
                                         </div>
                                     </motion.button>
