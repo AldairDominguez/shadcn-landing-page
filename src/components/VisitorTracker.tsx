@@ -18,7 +18,6 @@ interface StatsResponse {
 export const VisitorTracker = () => {
     const [visits, setVisits] = useState(0);
     const [likes, setLikes] = useState(0);
-    const [hasLiked, setHasLiked] = useState(false);
     const [showRegisterModal, setShowRegisterModal] = useState(false);
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
@@ -34,7 +33,6 @@ export const VisitorTracker = () => {
                 const data: StatsResponse = await response.json();
                 setVisits(data.visits);
                 setLikes(data.likes);
-                setHasLiked(data.hasLiked || false);
             }
         } catch (error) {
             console.error('Error fetching stats:', error);
@@ -49,7 +47,6 @@ export const VisitorTracker = () => {
                 const data: StatsResponse = await response.json();
                 setVisits(data.visits);
                 setLikes(data.likes);
-                setHasLiked(data.hasLiked || false);
             }
         } catch (error) {
             console.error('Error recording visit:', error);
@@ -62,15 +59,6 @@ export const VisitorTracker = () => {
         // Check if user is registered (still using localStorage for this)
         const userRegistered = localStorage.getItem("rutalegal_registered") === "true";
         setRegistered(userRegistered);
-
-        // Check if user already liked (from localStorage) - ONLY if registered
-        if (userRegistered) {
-            const userLiked = localStorage.getItem("rutalegal_user_liked") === "true";
-            setHasLiked(userLiked);
-        } else {
-            // If not registered, reset hasLiked to false
-            setHasLiked(false);
-        }
 
         // Record visit and fetch stats
         recordVisit();
@@ -88,45 +76,31 @@ export const VisitorTracker = () => {
         return () => clearInterval(interval);
     }, []);
 
+
     const handleLike = async () => {
-        // Check if user is registered first
-        if (!registered) {
-            // Show registration modal if not registered
-            setShowRegisterModal(true);
-            return;
-        }
+        try {
+            // Optimistic update - update UI immediately
+            const newLikes = likes + 1;
+            setLikes(newLikes);
 
-        if (!hasLiked) {
-            try {
-                // Optimistic update - update UI immediately
-                const newLikes = likes + 1;
-                setLikes(newLikes);
-                setHasLiked(true);
-                localStorage.setItem("rutalegal_user_liked", "true");
+            // Send to server
+            const response = await fetch(`${API_BASE}/stats?action=like`, {
+                method: 'POST',
+            });
 
-                // Send to server (without IP check)
-                const response = await fetch(`${API_BASE}/stats?action=like`, {
-                    method: 'POST',
-                });
-
-                if (response.ok) {
-                    const data: StatsResponse = await response.json();
-                    // Update with server response to sync
-                    setLikes(data.likes);
-                } else {
-                    // If server fails, revert
-                    console.error('Error liking');
-                    setLikes(likes);
-                    setHasLiked(false);
-                    localStorage.removeItem("rutalegal_user_liked");
-                }
-            } catch (error) {
-                console.error('Error liking:', error);
-                // Revert on error
+            if (response.ok) {
+                const data: StatsResponse = await response.json();
+                // Update with server response to sync
+                setLikes(data.likes);
+            } else {
+                // If server fails, revert
+                console.error('Error liking');
                 setLikes(likes);
-                setHasLiked(false);
-                localStorage.removeItem("rutalegal_user_liked");
             }
+        } catch (error) {
+            console.error('Error liking:', error);
+            // Revert on error
+            setLikes(likes);
         }
     };
 
@@ -146,9 +120,6 @@ export const VisitorTracker = () => {
                 localStorage.setItem("rutalegal_registered", "true");
                 setRegistered(true);
 
-                // Reset hasLiked so they can give a like after registering
-                setHasLiked(false);
-                localStorage.removeItem("rutalegal_user_liked");
 
                 setShowRegisterModal(false);
                 setShowSuccessModal(true);
@@ -162,9 +133,6 @@ export const VisitorTracker = () => {
                 localStorage.setItem("rutalegal_registered", "true");
                 setRegistered(true);
 
-                // Reset hasLiked so they can give a like after registering
-                setHasLiked(false);
-                localStorage.removeItem("rutalegal_user_liked");
 
                 setShowRegisterModal(false);
                 setShowSuccessModal(true);
@@ -228,17 +196,13 @@ export const VisitorTracker = () => {
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
                                         onClick={handleLike}
-                                        disabled={hasLiked}
-                                        className="flex items-center gap-2 text-sm cursor-pointer disabled:cursor-not-allowed"
+                                        className="flex items-center gap-2 text-sm cursor-pointer"
                                     >
-                                        <Heart
-                                            className={`h-4 w-4 transition-colors ${hasLiked ? "fill-red-500 text-red-500" : "text-gray-400"
-                                                }`}
-                                        />
+                                        <Heart className="h-4 w-4 text-red-500" />
                                         <div>
                                             <div className="font-bold text-lg">{likes.toLocaleString()}</div>
                                             <div className="text-xs text-muted-foreground">
-                                                {hasLiked ? "Te gusta" : "Me gusta"}
+                                                Me gusta
                                             </div>
                                         </div>
                                     </motion.button>
