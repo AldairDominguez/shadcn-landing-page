@@ -72,8 +72,8 @@ export const VisitorTracker = () => {
             return () => clearTimeout(timer);
         }
 
-        // Poll for updates every 10 seconds to show real-time changes
-        const interval = setInterval(fetchStats, 10000);
+        // Poll for updates every 3 seconds to show real-time changes
+        const interval = setInterval(fetchStats, 3000);
         return () => clearInterval(interval);
     }, []);
 
