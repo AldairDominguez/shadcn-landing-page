@@ -183,82 +183,74 @@ export const Articles = () => {
                 </div>
             </motion.div>
 
-            {/* PDF Preview Dialog - Using object/embed for better compatibility */}
+            {/* PDF Preview Dialog - Simple and Reliable */}
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogContent className="max-w-7xl w-[95vw] h-[95vh] p-0 gap-0 flex flex-col">
-                    {/* Compact Header */}
-                    <DialogHeader className="p-3 sm:p-4 md:p-6 pb-3 sm:pb-4 border-b shrink-0">
-                        <DialogTitle className="text-lg sm:text-xl md:text-2xl pr-8 line-clamp-2">
+                <DialogContent className="max-w-2xl">
+                    <DialogHeader>
+                        <DialogTitle className="text-2xl">
                             {selectedArticle?.title}
                         </DialogTitle>
-                        {/* Hide description on mobile to save space */}
-                        <DialogDescription className="hidden md:block text-sm md:text-base pt-2 line-clamp-2">
+                        <DialogDescription className="text-base pt-2">
                             {selectedArticle?.description}
                         </DialogDescription>
-                        {/* Compact badges - hide on mobile */}
-                        <div className="hidden sm:flex gap-2 pt-2 md:pt-3 flex-wrap">
-                            <Badge variant="secondary" className="bg-primary/10 text-primary text-xs">
+                    </DialogHeader>
+
+                    {/* Article Info and Actions */}
+                    <div className="flex flex-col gap-6 py-4">
+                        {/* Badges */}
+                        <div className="flex gap-2 flex-wrap">
+                            <Badge variant="secondary" className="bg-primary/10 text-primary">
                                 <Tag className="h-3 w-3 mr-1" />
                                 {selectedArticle?.category}
                             </Badge>
-                            <Badge variant="secondary" className="text-xs">
+                            <Badge variant="secondary">
                                 <Calendar className="h-3 w-3 mr-1" />
                                 {selectedArticle?.date}
                             </Badge>
-                            <Badge variant="secondary" className="text-xs">
+                            <Badge variant="secondary">
                                 <FileText className="h-3 w-3 mr-1" />
                                 {selectedArticle?.readTime}
                             </Badge>
                         </div>
-                    </DialogHeader>
 
-                    {/* PDF Viewer - Using object/embed for better compatibility */}
-                    <div className="flex-1 overflow-hidden bg-muted/30 min-h-0">
-                        {selectedArticle && (
-                            <object
-                                data={`${selectedArticle.pdfUrl}#toolbar=0&navpanes=0&scrollbar=1`}
-                                type="application/pdf"
-                                className="w-full h-full"
-                                title={selectedArticle.title}
-                            >
-                                <embed
-                                    src={`${selectedArticle.pdfUrl}#toolbar=0&navpanes=0&scrollbar=1`}
-                                    type="application/pdf"
-                                    className="w-full h-full"
-                                />
-                                {/* Fallback for browsers that don't support PDF embedding */}
-                                <div className="flex flex-col items-center justify-center h-full gap-4 p-8">
-                                    <FileText className="h-16 w-16 text-muted-foreground" />
-                                    <p className="text-center text-muted-foreground">
-                                        Tu navegador no puede mostrar el PDF directamente.
-                                    </p>
-                                    <Button
-                                        onClick={() => window.open(selectedArticle.pdfUrl, '_blank')}
-                                        variant="default"
-                                        className="gap-2"
-                                    >
-                                        <Eye className="h-4 w-4" />
-                                        Abrir PDF en nueva pestaña
-                                    </Button>
+                        {/* PDF Icon Display */}
+                        <div className="flex items-center justify-center p-12 bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5 rounded-lg border-2 border-dashed border-primary/20">
+                            <div className="text-center space-y-3">
+                                <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-primary/10">
+                                    <FileText className="h-12 w-12 text-primary" />
                                 </div>
-                            </object>
-                        )}
-                    </div>
+                                <p className="text-sm text-muted-foreground font-medium">
+                                    Documento PDF listo para visualizar
+                                </p>
+                            </div>
+                        </div>
 
-                    {/* Compact Footer */}
-                    <div className="p-2 sm:p-3 md:p-4 border-t bg-background flex flex-col sm:flex-row gap-2 sm:gap-0 sm:justify-between sm:items-center shrink-0">
-                        <p className="text-xs sm:text-sm text-muted-foreground text-center sm:text-left">
-                            Usa el visor para navegar por el documento
-                        </p>
-                        <Button
-                            onClick={() => selectedArticle && handleDownload(selectedArticle.pdfUrl, selectedArticle.title)}
-                            variant="default"
-                            size="sm"
-                            className="gap-2 w-full sm:w-auto"
-                        >
-                            <Download className="h-4 w-4" />
-                            <span className="sm:inline">Descargar PDF</span>
-                        </Button>
+                        {/* Action Buttons */}
+                        <div className="flex flex-col sm:flex-row gap-3">
+                            <Button
+                                onClick={() => window.open(selectedArticle?.pdfUrl, '_blank')}
+                                className="flex-1 gap-2 h-12"
+                                size="lg"
+                            >
+                                <Eye className="h-5 w-5" />
+                                Abrir PDF
+                            </Button>
+
+                            <Button
+                                onClick={() => selectedArticle && handleDownload(selectedArticle.pdfUrl, selectedArticle.title)}
+                                variant="outline"
+                                className="flex-1 gap-2 h-12"
+                                size="lg"
+                            >
+                                <Download className="h-5 w-5" />
+                                Descargar
+                            </Button>
+                        </div>
+
+                        {/* Info Note */}
+                        <div className="text-center text-sm text-muted-foreground bg-muted/50 p-3 rounded-lg">
+                            El PDF se abrirá en una nueva pestaña de tu navegador
+                        </div>
                     </div>
                 </DialogContent>
             </Dialog>
