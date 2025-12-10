@@ -183,7 +183,7 @@ export const Articles = () => {
                 </div>
             </motion.div>
 
-            {/* PDF Preview Dialog - Optimized for Mobile */}
+            {/* PDF Preview Dialog - Using object/embed for better compatibility */}
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogContent className="max-w-7xl w-[95vw] h-[95vh] p-0 gap-0 flex flex-col">
                     {/* Compact Header */}
@@ -212,14 +212,36 @@ export const Articles = () => {
                         </div>
                     </DialogHeader>
 
-                    {/* PDF Viewer - Maximum space */}
+                    {/* PDF Viewer - Using object/embed for better compatibility */}
                     <div className="flex-1 overflow-hidden bg-muted/30 min-h-0">
                         {selectedArticle && (
-                            <iframe
-                                src={selectedArticle.pdfUrl}
-                                className="w-full h-full border-0"
+                            <object
+                                data={`${selectedArticle.pdfUrl}#toolbar=0&navpanes=0&scrollbar=1`}
+                                type="application/pdf"
+                                className="w-full h-full"
                                 title={selectedArticle.title}
-                            />
+                            >
+                                <embed
+                                    src={`${selectedArticle.pdfUrl}#toolbar=0&navpanes=0&scrollbar=1`}
+                                    type="application/pdf"
+                                    className="w-full h-full"
+                                />
+                                {/* Fallback for browsers that don't support PDF embedding */}
+                                <div className="flex flex-col items-center justify-center h-full gap-4 p-8">
+                                    <FileText className="h-16 w-16 text-muted-foreground" />
+                                    <p className="text-center text-muted-foreground">
+                                        Tu navegador no puede mostrar el PDF directamente.
+                                    </p>
+                                    <Button
+                                        onClick={() => window.open(selectedArticle.pdfUrl, '_blank')}
+                                        variant="default"
+                                        className="gap-2"
+                                    >
+                                        <Eye className="h-4 w-4" />
+                                        Abrir PDF en nueva pestaña
+                                    </Button>
+                                </div>
+                            </object>
                         )}
                     </div>
 
