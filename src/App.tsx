@@ -12,6 +12,7 @@ import { Sponsors } from "./components/Sponsors";
 import { LegalGuide } from "./components/LegalGuide";
 import { FreeConsultation } from "./components/FreeConsultation";
 import { LegalResources } from "./components/LegalResources";
+import { Articles } from "./components/Articles";
 import { VisitorTracker } from "./components/VisitorTracker";
 import "./App.css";
 import { useEffect } from "react";
@@ -45,6 +46,7 @@ function App() {
       <Features />
       <Services />
       <LegalResources />
+      <Articles />
       <Newsletter />
       <FAQ />
       <Footer />
