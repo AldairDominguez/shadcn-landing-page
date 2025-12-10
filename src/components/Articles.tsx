@@ -1,10 +1,8 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { FileText, Download, Calendar, Tag, Eye } from "lucide-react";
 import { motion } from "framer-motion";
-import { useState } from "react";
 
 interface ArticleProps {
     title: string;
@@ -29,9 +27,6 @@ const articles: ArticleProps[] = [
 ];
 
 export const Articles = () => {
-    const [selectedArticle, setSelectedArticle] = useState<ArticleProps | null>(null);
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
-
     const handleDownload = (url: string, title: string) => {
         // Track download event
         if ((window as any).gtag) {
@@ -49,16 +44,16 @@ export const Articles = () => {
         document.body.removeChild(link);
     };
 
-    const handleView = (article: ArticleProps) => {
+    const handleView = (url: string, title: string) => {
         // Track view event
         if ((window as any).gtag) {
             (window as any).gtag('event', 'view_article', {
                 event_category: 'Articles',
-                event_label: article.title,
+                event_label: title,
             });
         }
-        setSelectedArticle(article);
-        setIsDialogOpen(true);
+        // Open PDF in new tab
+        window.open(url, '_blank');
     };
 
     return (
@@ -145,7 +140,7 @@ export const Articles = () => {
                                 {/* Actions */}
                                 <CardContent className="space-y-3">
                                     <Button
-                                        onClick={() => handleView(article)}
+                                        onClick={() => handleView(article.pdfUrl, article.title)}
                                         className="w-full gap-2 bg-primary hover:bg-primary/90"
                                         size="lg"
                                     >
@@ -182,78 +177,6 @@ export const Articles = () => {
                     </p>
                 </div>
             </motion.div>
-
-            {/* PDF Preview Dialog - Simple and Reliable */}
-            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogContent className="max-w-2xl">
-                    <DialogHeader>
-                        <DialogTitle className="text-2xl">
-                            {selectedArticle?.title}
-                        </DialogTitle>
-                        <DialogDescription className="text-base pt-2">
-                            {selectedArticle?.description}
-                        </DialogDescription>
-                    </DialogHeader>
-
-                    {/* Article Info and Actions */}
-                    <div className="flex flex-col gap-6 py-4">
-                        {/* Badges */}
-                        <div className="flex gap-2 flex-wrap">
-                            <Badge variant="secondary" className="bg-primary/10 text-primary">
-                                <Tag className="h-3 w-3 mr-1" />
-                                {selectedArticle?.category}
-                            </Badge>
-                            <Badge variant="secondary">
-                                <Calendar className="h-3 w-3 mr-1" />
-                                {selectedArticle?.date}
-                            </Badge>
-                            <Badge variant="secondary">
-                                <FileText className="h-3 w-3 mr-1" />
-                                {selectedArticle?.readTime}
-                            </Badge>
-                        </div>
-
-                        {/* PDF Icon Display */}
-                        <div className="flex items-center justify-center p-12 bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5 rounded-lg border-2 border-dashed border-primary/20">
-                            <div className="text-center space-y-3">
-                                <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-primary/10">
-                                    <FileText className="h-12 w-12 text-primary" />
-                                </div>
-                                <p className="text-sm text-muted-foreground font-medium">
-                                    Documento PDF listo para visualizar
-                                </p>
-                            </div>
-                        </div>
-
-                        {/* Action Buttons */}
-                        <div className="flex flex-col sm:flex-row gap-3">
-                            <Button
-                                onClick={() => window.open(selectedArticle?.pdfUrl, '_blank')}
-                                className="flex-1 gap-2 h-12"
-                                size="lg"
-                            >
-                                <Eye className="h-5 w-5" />
-                                Abrir PDF
-                            </Button>
-
-                            <Button
-                                onClick={() => selectedArticle && handleDownload(selectedArticle.pdfUrl, selectedArticle.title)}
-                                variant="outline"
-                                className="flex-1 gap-2 h-12"
-                                size="lg"
-                            >
-                                <Download className="h-5 w-5" />
-                                Descargar
-                            </Button>
-                        </div>
-
-                        {/* Info Note */}
-                        <div className="text-center text-sm text-muted-foreground bg-muted/50 p-3 rounded-lg">
-                            El PDF se abrirá en una nueva pestaña de tu navegador
-                        </div>
-                    </div>
-                </DialogContent>
-            </Dialog>
         </section>
     );
 };
