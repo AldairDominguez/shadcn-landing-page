@@ -1,8 +1,10 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { FileText, Download, ExternalLink, Calendar, Tag } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { FileText, Download, Calendar, Tag, Eye } from "lucide-react";
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 interface ArticleProps {
     title: string;
@@ -27,6 +29,9 @@ const articles: ArticleProps[] = [
 ];
 
 export const Articles = () => {
+    const [selectedArticle, setSelectedArticle] = useState<ArticleProps | null>(null);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+
     const handleDownload = (url: string, title: string) => {
         // Track download event
         if ((window as any).gtag) {
@@ -44,15 +49,16 @@ export const Articles = () => {
         document.body.removeChild(link);
     };
 
-    const handleView = (url: string, title: string) => {
+    const handleView = (article: ArticleProps) => {
         // Track view event
         if ((window as any).gtag) {
             (window as any).gtag('event', 'view_article', {
                 event_category: 'Articles',
-                event_label: title,
+                event_label: article.title,
             });
         }
-        window.open(url, "_blank");
+        setSelectedArticle(article);
+        setIsDialogOpen(true);
     };
 
     return (
@@ -139,11 +145,11 @@ export const Articles = () => {
                                 {/* Actions */}
                                 <CardContent className="space-y-3">
                                     <Button
-                                        onClick={() => handleView(article.pdfUrl, article.title)}
+                                        onClick={() => handleView(article)}
                                         className="w-full gap-2 bg-primary hover:bg-primary/90"
                                         size="lg"
                                     >
-                                        <ExternalLink className="h-5 w-5" />
+                                        <Eye className="h-5 w-5" />
                                         Ver Artículo
                                     </Button>
 
@@ -176,6 +182,64 @@ export const Articles = () => {
                     </p>
                 </div>
             </motion.div>
+
+            {/* PDF Preview Dialog - Optimized for Mobile */}
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogContent className="max-w-7xl w-[95vw] h-[95vh] p-0 gap-0 flex flex-col">
+                    {/* Compact Header */}
+                    <DialogHeader className="p-3 sm:p-4 md:p-6 pb-3 sm:pb-4 border-b shrink-0">
+                        <DialogTitle className="text-lg sm:text-xl md:text-2xl pr-8 line-clamp-2">
+                            {selectedArticle?.title}
+                        </DialogTitle>
+                        {/* Hide description on mobile to save space */}
+                        <DialogDescription className="hidden md:block text-sm md:text-base pt-2 line-clamp-2">
+                            {selectedArticle?.description}
+                        </DialogDescription>
+                        {/* Compact badges - hide on mobile */}
+                        <div className="hidden sm:flex gap-2 pt-2 md:pt-3 flex-wrap">
+                            <Badge variant="secondary" className="bg-primary/10 text-primary text-xs">
+                                <Tag className="h-3 w-3 mr-1" />
+                                {selectedArticle?.category}
+                            </Badge>
+                            <Badge variant="secondary" className="text-xs">
+                                <Calendar className="h-3 w-3 mr-1" />
+                                {selectedArticle?.date}
+                            </Badge>
+                            <Badge variant="secondary" className="text-xs">
+                                <FileText className="h-3 w-3 mr-1" />
+                                {selectedArticle?.readTime}
+                            </Badge>
+                        </div>
+                    </DialogHeader>
+
+                    {/* PDF Viewer - Maximum space */}
+                    <div className="flex-1 overflow-hidden bg-muted/30 min-h-0">
+                        {selectedArticle && (
+                            <iframe
+                                src={selectedArticle.pdfUrl}
+                                className="w-full h-full border-0"
+                                title={selectedArticle.title}
+                            />
+                        )}
+                    </div>
+
+                    {/* Compact Footer */}
+                    <div className="p-2 sm:p-3 md:p-4 border-t bg-background flex flex-col sm:flex-row gap-2 sm:gap-0 sm:justify-between sm:items-center shrink-0">
+                        <p className="text-xs sm:text-sm text-muted-foreground text-center sm:text-left">
+                            Usa el visor para navegar por el documento
+                        </p>
+                        <Button
+                            onClick={() => selectedArticle && handleDownload(selectedArticle.pdfUrl, selectedArticle.title)}
+                            variant="default"
+                            size="sm"
+                            className="gap-2 w-full sm:w-auto"
+                        >
+                            <Download className="h-4 w-4" />
+                            <span className="sm:inline">Descargar PDF</span>
+                        </Button>
+                    </div>
+                </DialogContent>
+            </Dialog>
         </section>
     );
 };
