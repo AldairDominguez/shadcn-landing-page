@@ -1,8 +1,10 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { FileText, Download, Calendar, Tag, Eye } from "lucide-react";
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 interface ArticleProps {
     title: string;
@@ -27,6 +29,9 @@ const articles: ArticleProps[] = [
 ];
 
 export const Articles = () => {
+    const [selectedArticle, setSelectedArticle] = useState<ArticleProps | null>(null);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+
     const handleDownload = (url: string, title: string) => {
         // Track download event
         if ((window as any).gtag) {
@@ -44,16 +49,16 @@ export const Articles = () => {
         document.body.removeChild(link);
     };
 
-    const handleView = (url: string, title: string) => {
+    const handleView = (article: ArticleProps) => {
         // Track view event
         if ((window as any).gtag) {
             (window as any).gtag('event', 'view_article', {
                 event_category: 'Articles',
-                event_label: title,
+                event_label: article.title,
             });
         }
-        // Open PDF in new tab
-        window.open(url, '_blank');
+        setSelectedArticle(article);
+        setIsDialogOpen(true);
     };
 
     return (
@@ -140,7 +145,7 @@ export const Articles = () => {
                                 {/* Actions */}
                                 <CardContent className="space-y-3">
                                     <Button
-                                        onClick={() => handleView(article.pdfUrl, article.title)}
+                                        onClick={() => handleView(article)}
                                         className="w-full gap-2 bg-primary hover:bg-primary/90"
                                         size="lg"
                                     >
@@ -177,6 +182,50 @@ export const Articles = () => {
                     </p>
                 </div>
             </motion.div>
+
+            {/* PDF Viewer Dialog - Using Google Docs Viewer */}
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogContent className="max-w-6xl w-[95vw] h-[95vh] p-0 gap-0 flex flex-col">
+                    {/* Header */}
+                    <DialogHeader className="p-4 border-b shrink-0">
+                        <DialogTitle className="text-xl pr-8 line-clamp-1">
+                            {selectedArticle?.title}
+                        </DialogTitle>
+                        <DialogDescription className="hidden sm:block text-sm pt-1 line-clamp-1">
+                            {selectedArticle?.description}
+                        </DialogDescription>
+                    </DialogHeader>
+
+                    {/* PDF Viewer using Google Docs Viewer */}
+                    <div className="flex-1 overflow-hidden bg-muted/30 min-h-0">
+                        {selectedArticle && (
+                            <iframe
+                                src={`https://docs.google.com/viewer?url=${encodeURIComponent(window.location.origin + selectedArticle.pdfUrl)}&embedded=true`}
+                                className="w-full h-full border-0"
+                                title={selectedArticle.title}
+                            />
+                        )}
+                    </div>
+
+                    {/* Footer */}
+                    <div className="p-3 border-t bg-background shrink-0">
+                        <div className="flex flex-col sm:flex-row gap-3 items-center justify-between">
+                            <p className="text-xs sm:text-sm text-muted-foreground text-center sm:text-left">
+                                Visualizador de documentos PDF
+                            </p>
+                            <Button
+                                onClick={() => selectedArticle && handleDownload(selectedArticle.pdfUrl, selectedArticle.title)}
+                                variant="default"
+                                size="sm"
+                                className="gap-2 w-full sm:w-auto"
+                            >
+                                <Download className="h-4 w-4" />
+                                <span>Descargar PDF</span>
+                            </Button>
+                        </div>
+                    </div>
+                </DialogContent>
+            </Dialog>
         </section>
     );
 };
