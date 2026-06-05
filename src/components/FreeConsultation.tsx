@@ -20,10 +20,10 @@ const internalAdvisorsList: AdvisorProps[] = [
         imageUrl: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=400&h=400&fit=crop",
     },
     {
-        name: "Chantal Orihuela P.",
-        specialty: "Derecho Laboral",
-        phone: "938611030",
-        imageUrl: "/chantal_orihuela.jpg",
+        name: "Nuria Evelyn Melgarejo Camones",
+        specialty: "Derecho de Familia",
+        phone: "987654321",
+        imageUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop",
     },
     {
         name: "Nadia Tello Herrera",
@@ -32,10 +32,22 @@ const internalAdvisorsList: AdvisorProps[] = [
         imageUrl: "https://images.unsplash.com/photo-1505664194779-8beaceb93744?w=400&h=400&fit=crop",
     },
     {
-        name: "Sofia Mareli Pretel Rojas",
+        name: "Audria Carbajal Rios",
+        specialty: "Derecho Laboral",
+        phone: "912345678",
+        imageUrl: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=400&h=400&fit=crop",
+    },
+    {
+        name: "Gerardo Henry Huamani Andia",
+        specialty: "Derecho Constitucional",
+        phone: "923456789",
+        imageUrl: "https://images.unsplash.com/photo-1556157382-97eda2d62296?w=400&h=400&fit=crop",
+    },
+    {
+        name: "Jessica María Velasquez Lanasca",
         specialty: "Derecho Administrativo",
-        phone: "933947836",
-        imageUrl: "https://images.unsplash.com/photo-1436450412740-6b988f486c6b?w=400&h=400&fit=crop",
+        phone: "934567890",
+        imageUrl: "https://images.unsplash.com/photo-1580894732444-8ecded7900cd?w=400&h=400&fit=crop",
     },
 ];
 
@@ -90,7 +102,7 @@ export const FreeConsultation = () => {
                     </p>
                 </motion.div>
 
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {internalAdvisorsList.map((advisor, index) => (
                         <motion.div
                             key={advisor.phone}
